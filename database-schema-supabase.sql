@@ -1,7 +1,7 @@
--- Perfect Pairing Database Schema
+-- Perfect Pairing Database Schema - Supabase Optimized
 -- Designed for AI-powered beverage pairing recommendations
 
--- Enable UUID extension
+-- Enable UUID extension (may already be enabled)
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- Users table (extends auth.users)

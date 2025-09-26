@@ -1,26 +1,332 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap');
+
+/* Perfect Pairing Design System - Based on Workout Tracker */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Colors - Clean white/gray palette with black primary */
+  --color-background: #ffffff;
+  --color-foreground: #000000;
+  --color-gray-50: #f8f9fa;
+  --color-gray-100: #f1f3f4;
+  --color-gray-200: #e9ecef;
+  --color-gray-300: #dee2e6;
+  --color-gray-400: #ced4da;
+  --color-gray-500: #adb5bd;
+  --color-gray-600: #6c757d;
+  --color-gray-700: #495057;
+  --color-gray-800: #343a40;
+  --color-gray-900: #212529;
+
+  /* Brand colors */
+  --color-primary: #000000;
+  --color-primary-hover: #343a40;
+
+  /* Semantic colors with gradients */
+  --color-success: #16a34a;
+  --color-success-light: #22c55e;
+  --color-success-bg: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+  --color-success-hover-bg: #f0fdf4;
+  --color-success-active-bg: #dcfce7;
+
+  --color-danger: #dc2626;
+  --color-danger-light: #ef4444;
+  --color-danger-bg: linear-gradient(135deg, #fef2f2 0%, #fef7f7 100%);
+  --color-danger-hover-bg: #fef2f2;
+  --color-danger-active-bg: #fee2e2;
+
+  --color-warning: #f59e0b;
+  --color-info: #3b82f6;
+
+  /* Typography */
+  --font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-size-base: 98%; /* 98% letter spacing like workout tracker */
+  --letter-spacing: -0.02em;
+
+  /* Border radius */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 25px; /* For buttons */
+  --radius-pill: 50px; /* For toggles */
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.15);
+  --shadow-xl: 0 8px 16px rgba(0, 0, 0, 0.15);
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.2s ease;
+  --transition-smooth: 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-background: var(--color-background);
+  --color-foreground: var(--color-foreground);
+  --font-sans: var(--font-family);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-family);
+  background: var(--color-background);
+  color: var(--color-foreground);
+  line-height: 1.5;
+  letter-spacing: var(--letter-spacing);
+  font-size: var(--font-size-base);
+  font-weight: 400;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Focus indicators for accessibility */
+*:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+button:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Remove focus outline for mouse users */
+.js-focus-visible :focus:not(.focus-visible) {
+  outline: none;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Selection styles */
+::selection {
+  background: var(--color-primary);
+  color: var(--color-background);
+}
+
+/* Remove default button styles */
+button {
+  border: none;
+  background: none;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* Remove default input styles */
+input, textarea, select {
+  font-family: inherit;
+  border: none;
+  outline: none;
+  background: transparent;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-gray-100);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-gray-400);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gray-500);
+}
+
+/* Utility classes for common patterns */
+.container-mobile {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 16px;
+  min-height: 100vh;
+}
+
+.card {
+  background: var(--color-background);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin-bottom: 16px;
+  border: 1px solid var(--color-gray-200);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-base {
+  padding: 16px 24px;
+  border: 2px solid transparent;
+  border-radius: var(--radius-xl);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast), transform var(--transition-fast);
+  min-height: 54px;
+  box-shadow: var(--shadow-md);
+  will-change: transform;
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-base:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn-base:active {
+  transform: scale(0.97);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: var(--color-background);
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-hover);
+}
+
+.btn-success {
+  background: var(--color-success-bg);
+  color: var(--color-success);
+  border: 2px solid var(--color-success);
+  font-weight: 500;
+}
+
+.btn-success:hover {
+  background: var(--color-success-hover-bg);
+  color: #15803d;
+  border-color: #15803d;
+  transform: translateY(-1px);
+}
+
+.btn-success:active {
+  background: var(--color-success-active-bg);
+  transform: translateY(0);
+}
+
+.btn-danger {
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
+  border: 2px solid var(--color-danger);
+  font-weight: 500;
+}
+
+.btn-danger:hover {
+  background: var(--color-danger-hover-bg);
+  color: #b91c1c;
+  border-color: #b91c1c;
+  transform: translateY(-1px);
+}
+
+.btn-danger:active {
+  background: var(--color-danger-active-bg);
+  transform: translateY(0);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Navigation toggle styles */
+.nav-toggle {
+  position: relative;
+  background: var(--color-gray-50);
+  border-radius: var(--radius-pill);
+  padding: 4px;
+  border: 1px solid var(--color-gray-200);
+  outline: none;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+.nav-btn {
+  position: relative;
+  padding: 12px 24px;
+  border: none;
+  outline: none;
+  background: transparent;
+  border-radius: 46px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color var(--transition-normal);
+  color: var(--color-gray-600);
+  z-index: 1;
+  min-width: 120px;
+  will-change: color;
+  -webkit-font-smoothing: antialiased;
+}
+
+.nav-btn:focus {
+  outline: none !important;
+  border: none;
+}
+
+.nav-btn:hover {
+  color: var(--color-primary);
+}
+
+.nav-btn.active {
+  color: white;
+  font-weight: 600;
+}
+
+.nav-toggle::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: calc(50% - 4px);
+  height: calc(100% - 8px);
+  background: var(--color-primary);
+  border-radius: 42px;
+  transition: transform var(--transition-smooth);
+  box-shadow: var(--shadow-lg);
+  z-index: 0;
+  will-change: transform;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  contain: layout style paint;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Responsive design */
+@media (min-width: 768px) {
+  .container-mobile {
+    max-width: 768px;
+    padding: 24px;
+  }
+
+  .card {
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-mobile {
+    max-width: 1024px;
+    padding: 32px;
+  }
 }

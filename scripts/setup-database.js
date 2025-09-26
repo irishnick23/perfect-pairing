@@ -16,21 +16,33 @@ require('dotenv').config({ path: '.env.local' })
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
-if (!supabaseUrl || !supabaseServiceKey) {
-  console.error('❌ Missing Supabase environment variables')
-  console.log('Please make sure your .env.local file contains:')
-  console.log('- NEXT_PUBLIC_SUPABASE_URL')
-  console.log('- SUPABASE_SERVICE_ROLE_KEY')
+if (!supabaseUrl) {
+  console.error('❌ Missing NEXT_PUBLIC_SUPABASE_URL')
+  console.log('Please make sure your .env.local file contains the Supabase project URL')
   process.exit(1)
 }
 
-const supabase = createClient(supabaseUrl, supabaseServiceKey, {
+// Use service key if available, otherwise use anon key for basic verification
+const supabaseKey = supabaseServiceKey || supabaseAnonKey
+
+if (!supabaseKey) {
+  console.error('❌ Missing Supabase API key')
+  console.log('Please make sure your .env.local file contains either:')
+  console.log('- SUPABASE_SERVICE_ROLE_KEY (for full access), or')
+  console.log('- NEXT_PUBLIC_SUPABASE_ANON_KEY (for basic verification)')
+  process.exit(1)
+}
+
+const supabase = createClient(supabaseUrl, supabaseKey, {
   auth: {
     autoRefreshToken: false,
     persistSession: false
   }
 })
+
+console.log(`🔑 Using ${supabaseServiceKey ? 'service role' : 'anon'} key for verification`)
 
 async function verifySetup() {
   console.log('🔍 Verifying Supabase setup for Perfect Pairing...\n')
